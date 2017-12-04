@@ -57,6 +57,7 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 		user = model.CreateUser("anon", "")
 	}
 
+	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte(user.String()))
 
 }
