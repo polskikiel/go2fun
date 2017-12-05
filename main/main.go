@@ -7,6 +7,7 @@ import (
 	"strings"
 	"app/model"
 	"fmt"
+	"encoding/json"
 )
 
 type myHandler struct {
@@ -36,17 +37,19 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 	var user model.User
 	var username string
 
-	if len(path) > 1 {
+	i := len(path)
+
+	if i > 1 {
 		username = string([]byte(path[1])[:len(path[1])-1])
 	}
 
-	fmt.Println(len(path))
+	fmt.Println(i)
 
-	switch len(path) {
+	switch i {
 	case 3:
 		user = model.CreateUser(
 			username,
-			path[len(path)-1])
+			path[i-1])
 		break
 	case 2:
 		user = model.CreateUser(
@@ -57,7 +60,11 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 		user = model.CreateUser("anon", "")
 	}
 
-	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(user.String()))
+	js, err := json.Marshal(user)
+	if err != nil{
+		log.Fatal("User cannot be created")
+	}
 
+	w.Header().Set("Content-Type", "text/html")
+	w.Write(js)
 }
