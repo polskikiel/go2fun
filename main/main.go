@@ -63,6 +63,7 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 	js, err := json.Marshal(user)
 	if err != nil{
 		log.Fatal("User cannot be created")
+		return
 	}
 
 	w.Header().Set("Content-Type", "text/html")
